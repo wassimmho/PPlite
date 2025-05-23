@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin - Gestion des Matchs</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+  <style>
+    :root {
+      --primary: #7c3aed;
+      --primary-dark: #6d28d9;
+      --light: #f8fafc;
+      --card-bg: rgba(15, 23, 42, 0.75);
+    }
+
+    body {
+        background: linear-gradient(rgba(15, 15, 42, 0.9), rgba(15, 23, 42, 0.95)),
+            url('images/360_F_1016880316_LWFicWYhqXzAiGZOHqoKx7esuF5Jy737.jpg') no-repeat center center fixed;
+      background-size: cover;
+      font-family: 'Inter', sans-serif;
+      color: var(--light);
+      min-height: 100vh;
+      padding: 2rem;
+    }
+
+    .logo {
+      font-size: 2.5rem;
+      font-weight: 800;
+      text-align: center;
+      margin-bottom: 1rem;
+    }
+
+    .admin-title {
+      text-align: center;
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 2rem;
+    }
+
+    .container-wide {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2rem;
+      justify-content: center;
+    }
+
+    .admin-card {
+      flex: 1 1 800px;
+      background: var(--card-bg);
+      backdrop-filter: blur(12px);
+      border-radius: 16px;
+      padding: 2rem;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+    }
+
+    .form-control {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      color: var(--light);
+      border-radius: 10px;
+      padding: 1rem;
+    }
+
+    .form-control::placeholder {
+      color: rgba(255, 255, 255, 0.5);
+    }
+
+    .form-control:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.2);
+      background: rgba(255, 255, 255, 0.12);
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      border: none;
+      padding: 1rem;
+      font-weight: 600;
+      border-radius: 10px;
+      transition: all 0.3s ease;
+    }
+
+    .btn-primary:hover {
+      background: var(--primary-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(124, 58, 237, 0.3);
+    }
+
+    #matchCreated {
+      text-align: center;
+      padding-top: 1rem;
+      font-weight: 500;
+      color: #22c55e;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="logo">🎟️ GOATICKET</div>
+  <div class="admin-title">⚽ Admin - Création des Matchs</div>
+
+  <div class="container-wide">
+    <div class="admin-card">
+      <form id="createMatchForm">
+        <div class="row g-3">
+          <div class="col-md-6">
+            <input type="text" class="form-control" id="equipe1" placeholder="Équipe 1" required>
+          </div>
+          <div class="col-md-6">
+            <input type="text" class="form-control" id="equipe2" placeholder="Équipe 2" required>
+          </div>
+          <div class="col-md-6">
+            <input type="date" class="form-control" id="date" required>
+          </div>
+          <div class="col-md-6">
+            <input type="time" class="form-control" id="heure" required>
+          </div>
+          <div class="col-md-6">
+            <input type="text" class="form-control" id="lieu" placeholder="Lieu" required>
+          </div>
+          <div class="col-md-6">
+            <input type="number" class="form-control" id="capacite" placeholder="Capacité du stade" required>
+          </div>
+        </div>
+        <div class="d-grid mt-4">
+          <button type="submit" class="btn btn-primary">Ajouter le match</button>
+        </div>
+        <div id="matchCreated"></div>
+      </form>
+    </div>
+  </div>
+
+  <script src="js/admin.js"></script>
+
+</body>
+</html>

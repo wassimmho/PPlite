@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Choose Your Seat - GOATICKET</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --primary: #7c3aed;
+      --primary-dark: #6d28d9;
+      --primary-light: #8b5cf6;
+      --dark: #0f172a;
+      --light: #f8fafc;
+      --card-bg: rgba(15, 23, 42, 0.9);
+    }
+    
+    body {
+      background: url('https://images.unsplash.com/photo-1574629810360-7efbbe195018?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1920&q=80') no-repeat center center fixed;
+      background-size: cover;
+      min-height: 100vh;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      color: var(--light);
+    }
+    
+    .header-title {
+      color: var(--light);
+      padding: 2rem 0;
+      text-align: center;
+      font-size: 2.25rem;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+    }
+    
+    .booking-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 1rem;
+    }
+    
+    .stadium-visualization {
+      position: relative;
+      width: 100%;
+      height: 500px;
+      margin-bottom: 2rem;
+      background: url('https://images.unsplash.com/photo-1540747913346-19e32dc3e97e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80') no-repeat center center;
+      background-size: cover;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    }
+    
+    .pitch {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 60%;
+      height: 30%;
+      background: rgba(46, 125, 50, 0.9);
+      border-radius: 5px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: white;
+      font-weight: bold;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+      border: 2px solid rgba(255,255,255,0.3);
+    }
+    
+    .stand {
+      position: absolute;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: center;
+      padding: 10px;
+      gap: 5px;
+      background: rgba(30, 41, 59, 0.7);
+      border-radius: 8px;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+      backdrop-filter: blur(5px);
+    }
+    
+    /* Position the stands around the pitch */
+    .north-stand {
+      top: 10%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 70%;
+      height: 15%;
+      border-bottom-left-radius: 0;
+      border-bottom-right-radius: 0;
+    }
+    
+    .south-stand {
+      bottom: 10%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 70%;
+      height: 15%;
+      border-top-left-radius: 0;
+      border-top-right-radius: 0;
+    }
+    
+    .east-stand {
+      top: 50%;
+      right: 5%;
+      transform: translateY(-50%);
+      width: 15%;
+      height: 60%;
+      border-top-left-radius: 0;
+      border-bottom-left-radius: 0;
+    }
+    
+    .west-stand {
+      top: 50%;
+      left: 5%;
+      transform: translateY(-50%);
+      width: 15%;
+      height: 60%;
+      border-top-right-radius: 0;
+      border-bottom-right-radius: 0;
+    }
+    
+    .seat {
+      width: 25px;
+      height: 25px;
+      background: #64748b;
+      border-radius: 4px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 10px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+    
+    .seat:hover {
+      background: #94a3b8;
+      transform: scale(1.1);
+    }
+    
+    .seat.selected {
+      background: var(--primary);
+      color: white;
+      box-shadow: 0 0 10px var(--primary-light);
+    }
+    
+    .seat.vip {
+      background: #f59e0b;
+      color: var(--dark);
+    }
+    
+    .seat.vip.selected {
+      background: #d97706;
+      color: white;
+    }
+    
+    .seat.reserved {
+      background: #ef4444;
+      cursor: not-allowed;
+      opacity: 0.7;
+    }
+    
+    .booking-card {
+      border-radius: 16px;
+      overflow: hidden;
+      max-width: 800px;
+      width: 100%;
+      margin: 2rem auto;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
+      background: var(--card-bg);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .card-header {
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      color: white;
+      padding: 1.5rem;
+      text-align: center;
+      font-size: 1.5rem;
+      font-weight: 600;
+    }
+    
+    .card-body {
+      padding: 2rem;
+    }
+    
+    .seat-info {
+      display: flex;
+      justify-content: space-around;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    
+    .seat-type {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .seat-sample {
+      width: 20px;
+      height: 20px;
+      border-radius: 3px;
+    }
+    
+    .btn-confirm {
+      background: var(--primary);
+      border: none;
+      padding: 1rem;
+      font-weight: 600;
+      border-radius: 10px;
+      transition: all 0.3s ease;
+      width: 100%;
+      color: white;
+      margin-top: 1rem;
+    }
+    
+    .btn-confirm:hover {
+      background: var(--primary-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(124, 58, 237, 0.3);
+    }
+    
+    .selected-seat-info {
+      background: rgba(255, 255, 255, 0.08);
+      padding: 1.5rem;
+      border-radius: 10px;
+      margin-top: 1.5rem;
+    }
+    
+    @media (max-width: 768px) {
+      .stadium-visualization {
+        height: 400px;
+      }
+      
+      .pitch {
+        width: 80%;
+      }
+      
+      .north-stand, .south-stand {
+        width: 90%;
+      }
+      
+      .east-stand, .west-stand {
+        width: 20%;
+      }
+      
+      .seat {
+        width: 18px;
+        height: 18px;
+        font-size: 8px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="header-title">
+    🏟️ GOATICKET - Choose Your Seat
+  </div>
+  
+  <div class="booking-container">
+    <div class="stadium-visualization">
+      <div class="pitch">
+        PITCH
+      </div>
+      
+      <div class="stand north-stand" id="northStand">
+        <!-- Seats will be generated by JavaScript -->
+      </div>
+      
+      <div class="stand south-stand" id="southStand">
+        <!-- Seats will be generated by JavaScript -->
+      </div>
+      
+      <div class="stand east-stand" id="eastStand">
+        <!-- Seats will be generated by JavaScript -->
+      </div>
+      
+      <div class="stand west-stand" id="westStand">
+        <!-- Seats will be generated by JavaScript -->
+      </div>
+    </div>
+    
+    <div class="booking-card">
+      <div class="card-header">
+        Your Seat Selection
+      </div>
+      <div class="card-body">
+        <div class="seat-info">
+          <div class="seat-type">
+            <div class="seat-sample" style="background: #64748b;"></div>
+            <span>Regular Seat (€80)</span>
+          </div>
+          <div class="seat-type">
+            <div class="seat-sample" style="background: #f59e0b;"></div>
+            <span>VIP Seat (€120)</span>
+          </div>
+          <div class="seat-type">
+            <div class="seat-sample" style="background: #ef4444;"></div>
+            <span>Reserved</span>
+          </div>
+        </div>
+        
+        <div id="noSelection" class="text-center py-3">
+          <i class="fas fa-arrow-up fa-2x mb-2" style="color: var(--primary);"></i>
+          <p>Please select a seat from the stadium map above</p>
+        </div>
+        
+        <div id="selectedSeatInfo" class="selected-seat-info" style="display: none;">
+          <h5><i class="fas fa-ticket-alt me-2"></i> Your Selected Seat</h5>
+          <div id="seatDetails" class="mt-3"></div>
+          <button class="btn-confirm" id="confirmBtn">
+            <i class="fas fa-check-circle me-2"></i> Confirm Seat Selection
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Generate seats for each stand
+      const stands = {
+        northStand: { rows: 4, seatsPerRow: 12, vipRows: [0], label: 'North Stand' },
+        southStand: { rows: 4, seatsPerRow: 12, vipRows: [0], label: 'South Stand' },
+        eastStand: { rows: 6, seatsPerRow: 8, vipRows: [0,1], label: 'East Stand' },
+        westStand: { rows: 6, seatsPerRow: 8, vipRows: [0,1], label: 'West Stand' }
+      };
+      
+      // Randomly reserve some seats (about 20% of seats)
+      const reservedSeats = [];
+      for (const stand in stands) {
+        const totalSeats = stands[stand].rows * stands[stand].seatsPerRow;
+        const reservedCount = Math.floor(totalSeats * 0.2);
+        
+        for (let i = 0; i < reservedCount; i++) {
+          const row = Math.floor(Math.random() * stands[stand].rows);
+          const seat = Math.floor(Math.random() * stands[stand].seatsPerRow);
+          reservedSeats.push(`${stand}-${row}-${seat}`);
+        }
+      }
+      
+      // Create seats for each stand
+      for (const [standId, config] of Object.entries(stands)) {
+        const standElement = document.getElementById(standId);
+        
+        for (let row = 0; row < config.rows; row++) {
+          for (let seatNum = 0; seatNum < config.seatsPerRow; seatNum++) {
+            const seatId = `${standId}-${row}-${seatNum}`;
+            const seatElement = document.createElement('div');
+            seatElement.className = 'seat';
+            seatElement.id = seatId;
+            seatElement.textContent = `${String.fromCharCode(65 + row)}${seatNum + 1}`;
+            
+            // Check if seat is VIP
+            if (config.vipRows.includes(row)) {
+              seatElement.classList.add('vip');
+            }
+            
+            // Check if seat is reserved
+            if (reservedSeats.includes(seatId)) {
+              seatElement.classList.add('reserved');
+            } else {
+              // Add click event only for non-reserved seats
+              seatElement.addEventListener('click', function() {
+                selectSeat(seatId);
+              });
+            }
+            
+            standElement.appendChild(seatElement);
+          }
+        }
+      }
+      
+      // Selected seat variable
+      let selectedSeat = null;
+      
+      // Function to handle seat selection
+      function selectSeat(seatId) {
+        // Deselect previous seat if any
+        if (selectedSeat) {
+          document.getElementById(selectedSeat).classList.remove('selected');
+        }
+        
+        // Select new seat
+        selectedSeat = seatId;
+        document.getElementById(seatId).classList.add('selected');
+        
+        // Update seat info display
+        updateSeatInfo(seatId);
+      }
+      
+      // Function to update seat information display
+      function updateSeatInfo(seatId) {
+        const [stand, row, seat] = seatId.split('-');
+        const standName = stands[stand].label;
+        
+        const rowLetter = String.fromCharCode(65 + parseInt(row));
+        const seatNumber = parseInt(seat) + 1;
+        const isVip = document.getElementById(seatId).classList.contains('vip');
+        
+        document.getElementById('noSelection').style.display = 'none';
+        document.getElementById('selectedSeatInfo').style.display = 'block';
+        
+        document.getElementById('seatDetails').innerHTML = `
+          <div class="d-flex justify-content-between mb-2">
+            <span class="text-muted">Stand:</span>
+            <span class="fw-bold">${standName}</span>
+          </div>
+          <div class="d-flex justify-content-between mb-2">
+            <span class="text-muted">Seat:</span>
+            <span class="fw-bold">${rowLetter}${seatNumber}</span>
+          </div>
+          <div class="d-flex justify-content-between mb-2">
+            <span class="text-muted">Type:</span>
+            <span class="fw-bold">${isVip ? 'VIP' : 'Regular'} Seat</span>
+          </div>
+          <div class="d-flex justify-content-between mb-2">
+            <span class="text-muted">Price:</span>
+            <span class="fw-bold">${isVip ? '€120' : '€80'}</span>
+          </div>
+        `;
+      }
+      
+      // Confirm button handler
+      document.getElementById('confirmBtn').addEventListener('click', function() {
+        if (selectedSeat) {
+          const [stand, row, seat] = selectedSeat.split('-');
+          const standName = stands[stand].label;
+          const rowLetter = String.fromCharCode(65 + parseInt(row));
+          const seatNumber = parseInt(seat) + 1;
+          
+          Swal.fire({
+            title: 'Confirm Your Seat',
+            html: `You've selected <strong>${rowLetter}${seatNumber}</strong> in the <strong>${standName}</strong>.<br><br>Proceed to payment?`,
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonColor: '#7c3aed',
+            cancelButtonColor: '#64748b',
+            confirmButtonText: 'Yes, proceed',
+            cancelButtonText: 'No, change seat',
+            background: 'rgba(15, 23, 42, 0.9)',
+            color: '#f8fafc',
+            backdrop: 'rgba(0,0,0,0.7)'
+          }).then((result) => {
+            if (result.isConfirmed) {
+              // Here you would typically redirect to payment page or submit a form
+              Swal.fire({
+                title: 'Seat Reserved!',
+                text: 'Your ticket is being processed.',
+                icon: 'success',
+                confirmButtonColor: '#7c3aed'
+              });
+            }
+          });
+        }
+      });
+    });
+  </script>
+  <!-- SweetAlert for beautiful alerts -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</body>
+</html>

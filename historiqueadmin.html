@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin - Suivi des Ventes</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+  <style>
+    :root {
+      --primary: #7c3aed;
+      --primary-dark: #6d28d9;
+      --light: #f8fafc;
+      --card-bg: rgba(15, 23, 42, 0.75);
+    }
+
+     body {
+      background: linear-gradient(rgba(15, 15, 42, 0.9), rgba(15, 23, 42, 0.95)),
+            url('images/360_F_1016880316_LWFicWYhqXzAiGZOHqoKx7esuF5Jy737.jpg') no-repeat center center fixed;
+      background-size: cover;
+      font-family: 'Inter', sans-serif;
+      color: var(--light);
+      min-height: 100vh;
+      padding: 2rem;
+    }
+
+    .logo {
+      font-size: 2.5rem;
+      font-weight: 800;
+      text-align: center;
+      margin-bottom: 1rem;
+    }
+
+    .admin-title {
+      text-align: center;
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 2rem;
+    }
+
+    .admin-card {
+      background: var(--card-bg);
+      backdrop-filter: blur(12px);
+      border-radius: 16px;
+      padding: 2rem;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .form-select {
+      background: rgba(255, 255, 255, 0.08);
+      color: var(--light);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 10px;
+      padding: 0.75rem;
+      margin-bottom: 2rem;
+    }
+
+    table {
+      width: 100%;
+      margin-top: 1rem;
+    }
+
+    thead {
+      background-color: var(--primary-dark);
+    }
+
+    thead th {
+      color: white;
+      font-weight: 600;
+      padding: 1rem;
+    }
+
+    tbody td {
+      padding: 1rem;
+      background-color: rgba(255, 255, 255, 0.05);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    tbody tr:last-child td {
+      border-bottom: none;
+    }
+
+    .highlight-row td {
+      background-color: rgba(124, 58, 237, 0.5) !important;
+      color: #ffffff !important;
+      font-weight: 600;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    @media (max-width: 768px) {
+      .admin-card {
+        padding: 1rem;
+      }
+
+      thead {
+        display: none;
+      }
+
+      tbody td {
+        display: block;
+        text-align: right;
+        padding-left: 50%;
+        position: relative;
+      }
+
+      tbody td::before {
+        content: attr(data-label);
+        position: absolute;
+        left: 0;
+        padding-left: 1rem;
+        font-weight: 600;
+        text-align: left;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="logo">🎟️ GOATICKET</div>
+  <div class="admin-title">⚽ Admin - Suivi des Ventes par Match</div>
+
+  <div class="admin-card">
+    <select class="form-select" id="matchSelect">
+      <option selected disabled>Choisissez un match</option>
+      <option value="1">Paris SG vs Real Madrid</option>
+      <option value="2">OM vs Juventus</option>
+      <option value="3">Manchester City vs Bayern</option>
+    </select>
+
+    <table class="table table-hover text-light table-borderless">
+      <thead>
+        <tr>
+          <th>Match</th>
+          <th>Date</th>
+          <th>Heure</th>
+          <th>Stade</th>
+          <th>Capacité</th>
+          <th>Vendus</th>
+          <th>Restants</th>
+        </tr>
+      </thead>
+      <tbody id="salesTable">
+        <tr class="highlight-row">
+          <td data-label="Match">Paris SG vs Real Madrid</td>
+          <td data-label="Date">2025-06-12</td>
+          <td data-label="Heure">20:45</td>
+          <td data-label="Stade">Parc des Princes</td>
+          <td data-label="Capacité">45,000</td>
+          <td data-label="Vendus">37,280</td>
+          <td data-label="Restants">7,720</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <script>
+    const data = {
+      1: {
+        match: 'Paris SG vs Real Madrid',
+        date: '2025-06-12',
+        time: '20:45',
+        stadium: 'Parc des Princes',
+        capacity: 45000,
+        sold: 37280
+      },
+      2: {
+        match: 'OM vs Juventus',
+        date: '2025-06-15',
+        time: '21:00',
+        stadium: 'Vélodrome',
+        capacity: 67000,
+        sold: 55000
+      },
+      3: {
+        match: 'Manchester City vs Bayern',
+        date: '2025-06-18',
+        time: '20:30',
+        stadium: 'Etihad Stadium',
+        capacity: 53000,
+        sold: 49700
+      }
+    };
+
+    document.getElementById("matchSelect").addEventListener("change", function () {
+      const selected = this.value;
+      const m = data[selected];
+      const remaining = m.capacity - m.sold;
+
+      document.getElementById("salesTable").innerHTML = `
+        <tr class="highlight-row">
+          <td data-label="Match">${m.match}</td>
+          <td data-label="Date">${m.date}</td>
+          <td data-label="Heure">${m.time}</td>
+          <td data-label="Stade">${m.stadium}</td>
+          <td data-label="Capacité">${m.capacity.toLocaleString()}</td>
+          <td data-label="Vendus">${m.sold.toLocaleString()}</td>
+          <td data-label="Restants">${remaining.toLocaleString()}</td>
+        </tr>
+      `;
+    });
+  </script>
+
+</body>
+</html>

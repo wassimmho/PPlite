@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Reçu du Billet - GOATICKET</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <style>
+    :root {
+      --primary: #7c3aed;
+      --light: #f8fafc;
+      --dark-bg: #0f172a;
+    }
+
+    body {
+      background: linear-gradient(rgba(15, 23, 42, 0.95), rgba(15, 23, 42, 1)),
+                  url('images/UCL18-21_PressKit_KeyVisual_Stadium.jpg') no-repeat center center fixed;
+      background-size: cover;
+      color: var(--light);
+      font-family: 'Inter', sans-serif;
+      padding: 2rem;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .logo {
+      font-size: 2.5rem;
+      font-weight: 800;
+      margin-bottom: 2rem;
+    }
+
+    .ticket {
+      background: rgba(15, 23, 42, 0.85);
+      border-radius: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+      padding: 2rem;
+      max-width: 700px;
+      width: 100%;
+      position: relative;
+    }
+
+    .ticket h2 {
+      font-size: 1.75rem;
+      color: var(--primary);
+      margin-bottom: 1rem;
+    }
+
+    .ticket-info {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .ticket-info div {
+      flex: 1 1 45%;
+      background: rgba(255, 255, 255, 0.05);
+      padding: 1rem;
+      border-radius: 12px;
+    }
+
+    #qrcode {
+      width: 120px;
+      height: 120px;
+      margin: 0 auto;
+      background: white;
+      padding: 8px;
+      border-radius: 8px;
+    }
+
+    .btn-print {
+      margin-top: 2rem;
+      padding: 0.75rem 2rem;
+      background-color: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.3s ease;
+    }
+
+    .btn-print:hover {
+      background-color: #6d28d9;
+    }
+
+    @media print {
+      .btn-print, .logo {
+        display: none;
+      }
+
+      body {
+        background: white;
+        color: black;
+      }
+
+      .ticket {
+        box-shadow: none;
+        background: white;
+        color: black;
+        border: none;
+      }
+
+      .ticket-info div {
+        background: none;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="logo">🎟️ GOATICKET</div>
+
+  <div class="ticket">
+    <h2>🎫 Reçu de Paiement</h2>
+
+    <div class="ticket-info">
+      <div><strong>Nom du Match:</strong><br> Paris SG vs Real Madrid</div>
+      <div><strong>Date:</strong><br> 12 Juin 2025</div>
+      <div><strong>Heure:</strong><br> 20:45</div>
+      <div><strong>Lieu:</strong><br> Parc des Princes</div>
+      <div><strong>Nom Acheteur:</strong><br> Malik silarbi</div>
+      <div><strong>Email:</strong><br> malik2005@email.com</div>
+      <div><strong>Place:</strong><br> Tribune Est - Rang B - Siège 24</div>
+      <div><strong>Montant Payé:</strong><br> 75 €</div>
+    </div>
+
+    <div class="text-center">
+      <div id="qrcode"></div>
+      <small class="d-block mt-2">Code billet #GOA12345678</small>
+    </div>
+  </div>
+
+  <button class="btn-print" onclick="window.print()">Imprimer le Reçu</button>
+
+  <!-- QRCode.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+  <script>
+    // Generate QR code with custom content (e.g., ticket ID or full ticket info)
+    new QRCode(document.getElementById("qrcode"), {
+      text: "GOATICKET - Billet #GOA12345678 - Jean Dupont - Paris SG vs Real Madrid - 12 Juin 2025",
+      width: 100,
+      height: 100
+    });
+  </script>
+
+</body>
+</html>
